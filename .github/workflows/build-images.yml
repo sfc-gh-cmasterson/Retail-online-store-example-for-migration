@@ -81,7 +81,7 @@ jobs:
           provenance: false
 
       - name: Trivy image scan
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: ${{ steps.tags.outputs.repo }}:sha-${{ steps.tags.outputs.sha_short }}
           ignore-unfixed: true

@@ -80,7 +80,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: aquasecurity/trivy-action@0.20.0
+      - uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: fs
           scan-ref: .
@@ -101,7 +101,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - uses: aquasecurity/trivy-action@0.20.0
+      - uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: config
           scan-ref: .
