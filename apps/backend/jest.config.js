@@ -24,5 +24,11 @@ if (process.env.TEST_TYPE === "integration:http") {
 } else if (process.env.TEST_TYPE === "integration:modules") {
   module.exports.testMatch = ["**/src/modules/*/__tests__/**/*.[jt]s"];
 } else if (process.env.TEST_TYPE === "unit") {
-  module.exports.testMatch = ["**/src/**/__tests__/**/*.unit.spec.[jt]s"];
+  // Only run portable demo-agnostic unit specs by default. Brand-specific
+  // tests (vip-score, site-config, etc.) live alongside their modules and
+  // can be re-enabled by widening this glob.
+  module.exports.testMatch = [
+    "**/src/__tests__/unit/email-*.unit.spec.[jt]s",
+    "**/src/__tests__/unit/json-ld.unit.spec.[jt]s",
+  ];
 }

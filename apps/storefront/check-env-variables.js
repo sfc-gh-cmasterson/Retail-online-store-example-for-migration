@@ -10,6 +10,14 @@ const requiredEnvs = [
 ];
 
 function checkEnvVariables() {
+  // Skip the gate during CI lint/typecheck/build steps and during Storybook
+  // — those flows don't need real publishable keys. CI sets CI=true; the
+  // gate still fires for `pnpm dev` / `pnpm start` locally and in
+  // production runtime.
+  if (process.env.CI === "true" || process.env.SKIP_ENV_VALIDATION === "true") {
+    return;
+  }
+
   const missingEnvs = requiredEnvs.filter(function (env) {
     c;
     return !process.env[env.key];
