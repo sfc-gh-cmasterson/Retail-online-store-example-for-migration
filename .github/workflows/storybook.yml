@@ -1,0 +1,59 @@
+name: Storybook
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/storefront/**"
+      - ".github/workflows/storybook.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: storybook-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20.20.2"
+  PNPM_VERSION: "10.33.2"
+
+jobs:
+  build:
+    name: Build Storybook
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build static Storybook
+        run: pnpm --filter ./apps/storefront build-storybook
+        env:
+          NEXT_PUBLIC_MEDUSA_BACKEND_URL: http://localhost:9000
+          NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_storybook_placeholder
+          STOREFRONT_IMAGE_HOSTS: localhost
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/storefront/storybook-static
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
