@@ -33,7 +33,10 @@ jobs:
     name: Build Storybook
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    continue-on-error: true
+    # The Storybook workflow is intentionally NOT in the required-checks
+    # list on main. If the build fails (e.g. webpack5 + Next 15 hook quirk
+    # before the Storybook 9 upgrade) the workflow goes red but the merge
+    # gate is unaffected.
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -53,14 +56,12 @@ jobs:
           NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: pk_storybook_placeholder
           STOREFRONT_IMAGE_HOSTS: localhost
       - uses: actions/upload-pages-artifact@v3
-        if: success()
         with:
           path: apps/storefront/storybook-static
 
   deploy:
     name: Deploy to GitHub Pages
     needs: build
-    if: needs.build.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
