@@ -37,7 +37,7 @@ export default async function searchIndexRefresh(container: MedusaContainer) {
     logger.warn(`[Search Index] Drift exceeds threshold (${DRIFT_THRESHOLD}). Triggering full reindex...`)
 
     try {
-      const reindexModule = (await import("../scripts/reindex-search")) as unknown as { default: (args: any) => Promise<void> }
+      const reindexModule = (await import("../scripts/reindex-search.js")) as unknown as { default: (args: any) => Promise<void> }
       await reindexModule.default({ container } as any)
       logger.info("[Search Index] Full reindex completed successfully")
     } catch (err: any) {

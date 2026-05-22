@@ -183,7 +183,7 @@ export const SITE_CONFIG_REGISTRY: Record<string, SiteConfigDefinition> = {
     type: "string",
     isPublic: false,
     envVar: "EMAIL_FROM",
-    default: "Example Store <noreply@example.com>",,
+    default: "Example Store <noreply@example.com>",
     group: "email",
     label: "From address",
     description: "Sender for all transactional email.",
