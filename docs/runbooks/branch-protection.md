@@ -11,11 +11,16 @@ replicate (or relax) per their own org policy.
   - Self-approval is **allowed** (small-team convention; tighten for
     larger teams)
 - Require status checks to pass before merging:
-  - `Typecheck`, `Lint`, `Build (turbo)`
+  - `Install dependencies`, `Typecheck`, `Lint`, `Build (turbo)`
   - `Backend unit tests`, `Storefront component tests`
   - `Backend integration tests (Node 20)`
   - `Secret scan (gitleaks)`, `CodeQL (javascript-typescript)`
-  - `Dependency audit (pnpm)`, `Trivy filesystem scan`
+  - `Dependency audit (pnpm)`
+  - `Trivy filesystem scan`, `Trivy IaC scan (Dockerfiles + compose)`
+- The `Storybook` and `Build images` workflows are intentionally NOT in
+  this list — Storybook has a known Storybook 8.6 + Next 15.5 build
+  quirk pending Storybook 9 stable, and `Build images` runs post-merge
+  to publish to GHCR.
 - Require branches to be up to date before merging
 - Require linear history
 - Require signed commits (recommended; not strictly required)
