@@ -81,6 +81,27 @@ That's the idempotent path — Medusa raises this when a link already
 exists. The seed and `setup-fulfilment` paths swallow it. If your code
 doesn't, check `if (e.message?.includes("already exists"))` patterns.
 
+## Storybook fails with `Cannot read properties of undefined (reading 'tap')` or `Cannot find module 'next/dist/build/webpack/plugins/define-env-plugin.js'`
+
+Storybook 8.x has known incompatibilities with Next.js 15.5+. Two failure
+modes hit:
+
+- `@storybook/nextjs` (webpack5 builder) — webpack hook `tap` undefined.
+- `@storybook/experimental-nextjs-vite` 8.6 — preset imports a Next
+  internal that 15.5 moved.
+
+Track upstream fixes in [storybook#32301](https://github.com/storybookjs/storybook/issues/32301).
+Until Storybook 9 ships, the Storybook GitHub Pages deploy workflow is
+intentionally disabled. Stories still run locally:
+
+```bash
+pnpm --filter ./apps/storefront storybook
+```
+
+Re-enable by restoring `.github/workflows/storybook.yml` once a working
+Storybook + Next.js combination is available, or pin Next.js to 15.4 if
+visual regression tests are critical.
+
 ## Storybook fails to import `@modules/...`
 
 - Storybook reads tsconfig paths via `@storybook/nextjs`. If a path
