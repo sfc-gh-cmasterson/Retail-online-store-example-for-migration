@@ -13,7 +13,7 @@ COPY packages/shared-types/ packages/shared-types/
 COPY apps/storefront/ apps/storefront/
 
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV SKIP_ENV_VALIDATION=1
+ENV SKIP_ENV_VALIDATION=true
 
 RUN cd apps/storefront && pnpm build
 
