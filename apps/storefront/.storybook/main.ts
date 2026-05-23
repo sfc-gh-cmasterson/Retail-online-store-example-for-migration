@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@storybook/nextjs"
+import type { StorybookConfig } from "@storybook/experimental-nextjs-vite"
 import path from "path"
 
 const config: StorybookConfig = {
@@ -13,10 +13,8 @@ const config: StorybookConfig = {
     "@storybook/addon-themes",
   ],
   framework: {
-    name: "@storybook/nextjs",
-    options: {
-      nextConfigPath: path.resolve(__dirname, "../next.config.js"),
-    },
+    name: "@storybook/experimental-nextjs-vite",
+    options: {},
   },
   docs: {
     autodocs: "tag",
@@ -30,16 +28,14 @@ const config: StorybookConfig = {
         prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
     },
   },
-  webpackFinal: async (config) => {
-    // Workspace alias resolution for @retail-example/shared-types
-    if (config.resolve) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        "@retail-example/shared-types": path.resolve(
-          __dirname,
-          "../../../packages/shared-types/src"
-        ),
-      }
+  viteFinal: async (config) => {
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...(config.resolve.alias as Record<string, string>),
+      "@retail-example/shared-types": path.resolve(
+        __dirname,
+        "../../../packages/shared-types/src"
+      ),
     }
     return config
   },
